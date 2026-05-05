@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>东莞市行一生活用品有限公司 - 员工应聘登记表</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --bg-color: #f4f7f6;
+            --border-color: #ddd;
+        }
+
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+            color: var(--primary-color);
+        }
+
+        h1 { margin-bottom: 10px; font-size: 24px; }
+        .sub-title { text-align: center; color: #666; margin-bottom: 30px; font-size: 14px; }
+
+        fieldset {
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 25px;
+            background: #fff;
+        }
+
+        legend {
+            font-weight: bold;
+            color: var(--accent-color);
+            padding: 0 10px;
+            font-size: 1.1em;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.half { flex: 0 0 48%; }
+        .form-group.third { flex: 0 0 30%; }
+        .form-group.quarter { flex: 0 0 22%; }
+
+        label {
+            font-size: 14px;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .required::after {
+            content: " *";
+            color: red;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="tel"],
+        input[type="email"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--accent-color);
+            outline: none;
+        }
+
+        .radio-group, .checkbox-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 5px;
+        }
+
+        .radio-item, .checkbox-item {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .radio-item input, .checkbox-item input {
+            margin-right: 5px;
+        }
+
+        /* Table Styles for Dynamic Rows */
+        .dynamic-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 13px;
+        }
+
+        .dynamic-table th, .dynamic-table td {
+            border: 1px solid #eee;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .dynamic-table th {
+            background-color: #f8f9fa;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .btn-add {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+        .btn-add:hover { background-color: #219150; }
+
+        .btn-remove {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        /* Test Section */
+        .test-question {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #eee;
+        }
+        .test-question:last-child { border-bottom: none; }
+        .question-text { font-weight: bold; margin-bottom: 10px; display: block; }
+        
+        .declaration {
+            background: #f9f9f9;
+            padding: 15px;
+            border-left: 4px solid var(--accent-color);
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .submit-btn:hover { background-color: #2980b9; }
+
+        @media (max-width: 600px) {
+            .form-group.half, .form-group.third, .form-group.quarter {
+                flex: 0 0 100%;
+            }
+            .container { padding: 20px; }
+            .dynamic-table { 
+                display: block; 
+                overflow-x: auto; 
+                min-width: 300px;
+            }
+            
+            /* 移动端表格单元格样式调整 */
+            .dynamic-table td, .dynamic-table th {
+                padding: 6px 4px;
+                font-size: 12px;
+            }
+            
+            /* 移动端表格输入框调整 */
+            .dynamic-table input, .dynamic-table select {
+                padding: 6px;
+                font-size: 12px;
+                min-width: 80px;
+                width: 100%;
+            }
+            
+            /* 移动端小数字输入框最小宽度 */
+            .dynamic-table input[type="number"] {
+                min-width: 60px;
+                width: 80px;
+            }
+            
+            /* 移动端表格每一行变为垂直布局 */
+            .dynamic-table tr {
+                display: flex;
+                flex-direction: column;
+                border: 1px solid #eee;
+                margin-bottom: 10px;
+                padding: 8px;
+                border-radius: 4px;
+                background-color: #fafafa;
+            }
+            
+            /* 移动端表格单元格重新布局为标签-输入框对 */
+            .dynamic-table td {
+                display: flex;
+                flex-direction: column;
+                margin-bottom: 8px;
+                border: none;
+                padding: 4px 0;
+            }
+            
+            /* 将表头内容作为标签显示在输入框上方 */
+            .dynamic-table td::before {
+                content: attr(data-label);
+                font-weight: bold;
+                font-size: 12px;
+                margin-bottom: 4px;
+                color: #555;
+            }
+            
+            /* 隐藏表头行在移动端 */
+            .dynamic-table thead {
+                display: none;
+            }
+            
+            /* 操作列特殊处理 */
+            .dynamic-table td:last-child {
+                margin-bottom: 0;
+            }
+        }
+        
+        /* --- 新增：强制让 required 类在任何元素后显示红星星 --- */
+        .required::after {
+            content: " *";
+            color: #ff0000;
+            font-weight: bold;
+            font-size: 1em;
+        }
+
+        /* 专门针对题目文字的修复 */
+        .question-text.required::after {
+            content: " *";
+            color: #ff0000;
+        }
+
+        /* 专门针对表格表头的修复 */
+        th.required::after {
+            content: " *";
+            color: #ff0000;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>东莞市行一生活用品有限公司</h1>
+    <h2>员工应聘登记表</h2>
+    <p class="sub-title">注：带 * 号为必填项</p>
+
+    <form id="applicationForm" onsubmit="return handleSubmit(event)">
+        
+        <!-- 基本信息 -->
+        <fieldset>
+            <legend>基本信息</legend>
+            <!-- 第一行：大区与门店 (独占一行，各占 50%) -->
+            <div class="form-row">
+                <!-- 第一级：大区/总部 -->
+                <div class="form-group half">
+                    <label class="required">所属大区/城市</label>
+                    <select id="regionSelect" name="region" required>
+                        <option value="">请选择大区或城市</option>
+                        <option value="总部">总部</option>
+                        <option value="深圳市">深圳市</option>
+                        <option value="广州市">广州市</option>
+                        <option value="佛山市">佛山市</option>
+                        <option value="东莞市">东莞市</option>
+                        <option value="惠州市">惠州市</option>
+                        <option value="中山市">中山市</option>
+                        <option value="珠海市">珠海市</option>
+                        <option value="江门市">江门市</option>
+                        <option value="湛江市">湛江市</option>
+                        <option value="茂名市">茂名市</option>
+                        <option value="云浮市">云浮市</option>
+                        <option value="清远市">清远市</option>
+                        <option value="河源市">河源市</option>
+                        <!-- 请在此补充其他城市 -->
+                    </select>
+                </div>
+
+                <!-- 第二级：具体门店/部门 -->
+                <div class="form-group half">
+                    <label class="required">具体门店/部门</label>
+                    <select id="storeSelect" name="department" required disabled>
+                        <option value="">请先选择左侧城市/总部</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 第二行：姓名、性别、出生年月 (自动适应宽度) -->
+            <div class="form-row">
+                <!-- 姓名 -->
+                <div class="form-group third">
+                    <label class="required">姓名</label>
+                    <input type="text" name="name" required>
+                </div>
+
+                <!-- 性别 -->
+                <div class="form-group quarter">
+                    <label class="required">性别</label>
+                    <select name="gender" required>
+                        <option value="">请选择</option>
+                        <option value="男">男</option>
+                        <option value="女">女</option>
+                    </select>
+                </div>
+
+                <!-- 出生年月 -->
+                <div class="form-group quarter">
+                    <label class="required">出生年月</label>
+                    <input type="date" name="birthDate" required>
+                </div>
+                
+                <!-- 如果还有空间，可以把"第一学历"也放到这一行，变成4个 quarter -->
+                <!-- 如果没有，这三个会自动排列，剩下的空间留白，或者您可以调整下面的 CSS 让它们平分 -->
+            </div>
+            <div class="form-row">
+                <div class="form-group quarter">
+                    <label class="required">第一学历</label>
+                    <select name="education" required>
+                        <option value="">请选择</option>
+                        <option value="初中及以下">初中及以下</option>
+                        <option value="高中/中专">高中/中专</option>
+                        <option value="大专">大专</option>
+                        <option value="本科">本科</option>
+                        <option value="硕士及以上">硕士及以上</option>
+                    </select>
+                </div>
+                <div class="form-group quarter">
+                    <label class="required">民族</label>
+                    <input type="text" name="ethnicity" required>
+                </div>
+                <div class="form-group quarter">
+                    <label class="required">身份证号</label>
+                    <input type="text" name="idCard" required pattern="\d{17}[\dXx]" title="请输入正确的身份证号">
+                </div>
+                <div class="form-group quarter">
+                    <label class="required">政治面貌</label>
+                    <select name="politicalStatus">
+                        <option value="群众">群众</option>
+                        <option value="团员">团员</option>
+                        <option value="党员">党员</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group quarter">
+                    <label class="required">血型</label>
+                    <select name="bloodType">
+                        <option value="">请选择</option>
+                        <option value="A">A型</option>
+                        <option value="B">B型</option>
+                        <option value="O">O型</option>
+                        <option value="AB">AB型</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+                <div class="form-group quarter">
+                    <label class="required">健康状况</label>
+                    <select name="health" required>
+                        <option value="健康">健康</option>
+                        <option value="良好">良好</option>
+                        <option value="一般">一般</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+                <div class="form-group quarter">
+                    <label class="required">联系电话</label>
+                    <input type="tel" name="phone" required pattern="^1[3-9]\d{9}$" title="请输入正确的手机号">
+                </div>
+                <div class="form-group quarter">
+                    <label class="required">最快到岗时间</label>
+                    <input type="date" name="availableDate" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group half">
+                    <label class="required">婚育状况</label>
+                    <div class="radio-group">
+                        <label class="radio-item"><input type="radio" name="maritalStatus" value="已婚已育" required> 已婚已育</label>
+                        <label class="radio-item"><input type="radio" name="maritalStatus" value="已婚未育"> 已婚未育</label>
+                        <label class="radio-item"><input type="radio" name="maritalStatus" value="未婚"> 未婚</label>
+                        <label class="radio-item"><input type="radio" name="maritalStatus" value="离异"> 离异</label>
+                    </div>
+                </div>
+                <div class="form-group half">
+                    <label class="required">养育子女情况</label>
+                    <div style="display:flex; gap:10px;">
+                        <span>男 <input type="number" name="childrenMale" min="0" style="width:60px; display:inline-block;"> 人</span>
+                        <span>女 <input type="number" name="childrenFemale" min="0" style="width:60px; display:inline-block;"> 人</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group half">
+                    <label class="required">户籍地址</label>
+                    <input type="text" name="hukouAddress" required>
+                </div>
+                <div class="form-group half">
+                    <label class="required">现住址</label>
+                    <input type="text" name="currentAddress" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group third">
+                    <label class="required">应聘岗位</label>
+                    <input type="text" name="position" required>
+                </div>
+                <div class="form-group third">
+                    <label class="required">薪资要求</label>
+                    <input type="text" name="salaryExpectation" required placeholder="例如：5000-6000元">
+                </div>
+                <div class="form-group third">
+                    <label class="required">与原单位关系</label>
+                    <div class="radio-group">
+                        <label class="radio-item"><input type="radio" name="relationStatus" value="已解除" required> 已解除</label>
+                        <label class="radio-item"><input type="radio" name="relationStatus" value="未解除"> 未解除</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group half">
+                    <label class="required">紧急联络人</label> <!-- 建议加上 class="required" 显示红星 -->
+                    <input type="text" name="emergencyContact" required> <!-- 添加 required -->
+                </div>
+                <div class="form-group half">
+                    <label class="required">紧急联络人电话</label> <!-- 建议加上 class="required" 显示红星 -->
+                    <input type="tel" name="emergencyPhone" required> <!-- 添加 required -->
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group half">
+                    <label class="required">如何了解招聘信息</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item"><input type="checkbox" name="source" value="招聘软件"> 招聘软件</label>
+                        <label class="checkbox-item"><input type="checkbox" name="source" value="招聘传单"> 招聘传单</label>
+                        <label class="checkbox-item"><input type="checkbox" name="source" value="公司网站"> 公司网站</label>
+                        <label class="checkbox-item"><input type="checkbox" name="source" value="熟人介绍"> 熟人介绍</label>
+                        <label class="checkbox-item"><input type="checkbox" name="source" value="公司联系本人"> 公司联系本人</label>
+                        <label class="checkbox-item"><input type="checkbox" name="source" value="其他"> 其他</label>
+                    </div>
+                </div>
+                <div class="form-group quarter">
+                    <label>介绍人姓名</label>
+                    <input type="text" name="referrerName">
+                </div>
+                <div class="form-group quarter">
+                    <label>介绍人电话</label>
+                    <input type="tel" name="referrerPhone">
+                </div>
+            </div>
+             <div class="form-row">
+                <div class="form-group half">
+                    <label>与介绍人关系</label>
+                    <div class="radio-group">
+                        <label class="radio-item"><input type="radio" name="referrerRelation" value="家属"> 家属</label>
+                        <label class="radio-item"><input type="radio" name="referrerRelation" value="亲戚"> 亲戚</label>
+                        <label class="radio-item"><input type="radio" name="referrerRelation" value="朋友"> 朋友</label>
+                        <label class="radio-item"><input type="radio" name="referrerRelation" value="原同事"> 原同事</label>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- 教育经历 -->
+        <fieldset>
+            <legend>教育经历 <span style="font-size:12px; color:#666; font-weight:normal">(必填)</span></legend>
+            <table class="dynamic-table" id="eduTable">
+                <thead>
+                    <tr>
+                        <th style="width:20%">起止时间</th>
+                        <th style="width:25%">学校/机构名称</th>
+                        <th style="width:15%">入读途径</th>
+                        <th style="width:25%">专业</th>
+                        <th style="width:15%">证书/职称</th>
+                        <th style="width:5%">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- JS will populate rows -->
+                </tbody>
+            </table>
+            <button type="button" class="btn-add" onclick="addEduRow()">+ 添加教育经历</button>
+        </fieldset>
+
+        <!-- 工作经历 -->
+        <fieldset>
+            <legend>工作经历 <span style="font-size:12px; color:#666; font-weight:normal">(必填)</span></legend>
+            <table class="dynamic-table" id="workTable">
+                <thead>
+                    <tr>
+                        <th style="width:15%">起止时间</th>
+                        <th style="width:20%">工作单位</th>
+                        <th style="width:15%">职位</th>
+                        <th style="width:15%">薪资待遇</th>
+                        <th style="width:15%">离职原因</th>
+                        <th style="width:10%">证明人</th>
+                        <th style="width:10%">联系电话</th>
+                        <th style="width:5%">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- JS will populate rows -->
+                </tbody>
+            </table>
+            <button type="button" class="btn-add" onclick="addWorkRow()">+ 添加工作经历</button>
+        </fieldset>
+
+        <!-- ========== 修改开始：家庭情况改为必填 ========== -->
+        <!-- 家庭情况 -->
+        <fieldset>
+            <legend>家庭情况 <span style="font-size:12px; color:#666; font-weight:normal">(必填)</span></legend>
+            <table class="dynamic-table" id="familyTable">
+                <thead>
+                    <tr>
+                        <!-- 【修改1】给每个表头添加 class="required"，显示红色星号 -->
+                        <th class="required">姓名</th>
+                        <th class="required">年龄</th>
+                        <th class="required">与本人关系</th>
+                        <th class="required">工作单位/地址</th>
+                        <th class="required">联系电话</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                     <!-- JS will populate rows -->
+                </tbody>
+            </table>
+            <button type="button" class="btn-add" onclick="addFamilyRow()">+ 添加家庭成员</button>
+        </fieldset>
+        <!-- ========== 修改结束 ========== -->
+
+        <!-- 背景调查同意 -->
+        <fieldset>
+            <legend>背景调查授权</legend>
+            <div class="form-row">
+                <label class="required">是否同意我司接触你以前工作的雇主？</label>
+                <div class="radio-group">
+                    <label class="radio-item"><input type="radio" name="backgroundCheck" value="是" required> 是</label>
+                    <label class="radio-item"><input type="radio" name="backgroundCheck" value="否"> 否</label>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- 面试测试题 -->
+        <fieldset>
+            <legend>面试测试题</legend>
+            <p style="font-size:13px; color:#666; margin-bottom:20px;">您好，感谢您来行一公司面试，本测试题（均单选题）仅作为我们双方互相了解的作用，所有问题没有好坏或对错之分，因此请一定要选择你"最自然的"反应。</p>
+
+            <div class="question-text required">
+                <span class="question-text">1. 您找工作的标准 (   )</span>
+                <div class="radio-group">
+                    <label class="radio-item"><input type="radio" name="q1" value="A" required> A.符合兴趣爱好或专业</label>
+                    <label class="radio-item"><input type="radio" name="q1" value="B"> B.工作具有挑战性，多劳多得</label>
+                    <label class="radio-item"><input type="radio" name="q1" value="C"> C.自主性大，不受约束</label>
+                    <label class="radio-item"><input type="radio" name="q1" value="D"> D.工作环境好，待遇高</label>
+                </div>
+            </div>
+
+            <div class="question-text required">
+                <span class="question-text">2. 您对职业价值的认知是 (   )</span>
+                <div class="radio-group">
+                    <label class="radio-item"><input type="radio" name="q2" value="A" required> A. 赢得成就感，能看到自己工作的具体成果，并因此达成精神上的满足</label>
+                    <label class="radio-item"><input type="radio" name="q2" value="B"> B.提高个人身份或名望，但此声望是来自于他人的敬佩，而非来自权力与地位</label>
+                    <label class="radio-item"><input type="radio" name="q2" value="C"> C. 赋予个人权力来策划并分配工作给其他人，拥有管理权</label>
+                    <label class="radio-item"><input type="radio" name="q2" value="D"> D.获得优厚的报酬，使自己有足够的财力去获得自己想要的东西</label>
+                </div>
+            </div>
+
+            <div class="question-text required">
+                <span class="question-text">3. 当您在嘈杂环境中忽然接到面试电话，您会？(   )</span>
+                <div class="radio-group">
+                    <label class="radio-item"><input type="radio" name="q3" value="A" required> A. 无所谓，留在原地，继续接听</label>
+                    <label class="radio-item"><input type="radio" name="q3" value="B"> B. 立刻找一个比较安静的地方</label>
+                    <label class="radio-item"><input type="radio" name="q3" value="C"> C. 附近没有安静的地方，请对方留下联系方式，然后迅速打过去</label>
+                    <label class="radio-item"><input type="radio" name="q3" value="D"> D. 附近没有安静的地方，请对方留下联系方式，第二天再打</label>
+                </div>
+            </div>
+
+            <div class="question-text required">
+                <span class="question-text">4. 假设您作为公司主要员工，领导安排您处理临时工作，突然，家人致电说家里有非常紧急事务需要您立即回家处理，您将如何处理？(   )</span>
+                <div class="radio-group">
+                    <label class="radio-item"><input type="radio" name="q4" value="A" required> A. 事出紧急，家庭在第一位，并且无心工作，应告知领导后立刻放下手头事务，回家</label>
+                    <label class="radio-item"><input type="radio" name="q4" value="B"> B. 安排家人先处理事情，并告知家人自己将在处理完临时工作事务后第一时间回家</label>
+                    <label class="radio-item"><input type="radio" name="q4" value="C"> C. 致电领导，交接工作，并交接安排妥当后再赶回家</label>
+                    <label class="radio-item"><input type="radio" name="q4" value="D"> D.不接受非工作时间布置的临时工作，或与岗位职责不符的临时工作</label>
+                </div>
+            </div>
+
+            <div class="question-text required">
+                <span class="question-text">5. 领导需要您写一份工作汇报，于今日下午前上交。临近下班您完成了初稿，但是细节尚有提高空间，数据有待完善之处，您会 (   )</span>
+                <div class="radio-group">
+                    <label class="radio-item"><input type="radio" name="q5" value="A" required> A.先将初稿交至领导，待反馈意见后再整体修改</label>
+                    <label class="radio-item"><input type="radio" name="q5" value="B"> B. 写一封请示书给领导，申请延期一日提交，然后明日将报告尽善尽美的上交</label>
+                    <label class="radio-item"><input type="radio" name="q5" value="C"> C. 晚上加班完成，达到尽善尽美后交给领导</label>
+                    <label class="radio-item"><input type="radio" name="q5" value="D"> D.工作汇报不太重要，叙事清楚即可，应把主要劳动力放在提高公司收益上</label>
+                </div>
+            </div>
+
+            <div class="question-text required">
+                <span class="question-text">6. 如果企业中有一位很有才华、能力很强的人，工作业绩直线上升，但是他经常搞小动作，冒一些小的风险或做了伤害公司利益的事，但情节较轻。您作为部门领导你会怎么处理 / 或作为同事会怎么提建议。(   )</span>
+                <div class="radio-group">
+                    <label class="radio-item"><input type="radio" name="q6" value="A" required> A.这样的人不能用，按规章制度揭发，上报人力部门开除</label>
+                    <label class="radio-item"><input type="radio" name="q6" value="B"> B.引导教育、劝导，如果屡教不改，确定人格有问题再开除</label>
+                    <label class="radio-item"><input type="radio" name="q6" value="C"> C.通过引导教育，他屡教不改，但公司也不能没有他，只能顾全大局，睁一只眼闭一只眼</label>
+                    <label class="radio-item"><input type="radio" name="q6" value="D"> D.只要他业绩好，搞点小动作，不伤大体，毕竟他创造的价值远远高于他的小动作</label>
+                </div>
+            </div>
+
+            <div class="question-text required">
+                <span class="question-text">7. 假设您的上司是一个非常严厉、领导手腕强硬，时常给您压力的人，您的这种领导方式对你的意义是？(   )</span>
+                <div class="radio-group">
+                    <label class="radio-item"><input type="radio" name="q7" value="A" required> A.认为对您严厉是为了你好，在这种严厉的管理模式下，可以更好锻炼自己的抗压能力</label>
+                    <label class="radio-item"><input type="radio" name="q7" value="B"> B.认为较难以接受，希望通过转岗至其他部门</label>
+                    <label class="radio-item"><input type="radio" name="q7" value="C"> C.调整自己的状态以适应领导</label>
+                    <label class="radio-item"><input type="radio" name="q7" value="D"> D.暂时忍受，找到合适时机与领导沟通，找到适合双方的沟通方式</label>
+                </div>
+            </div>
+
+            <div class="question-text required">
+                <span class="question-text">8. 请您按照一般、合格、优秀、良好这个顺序给自己主观评价</span>
+                <table class="dynamic-table" style="margin-top:5px;">
+                    <thead>
+                        <tr>
+                            <th colspan="4" style="text-align:center; background:#f0f0f0;" class="required">意愿评价</th>
+                            <th colspan="4" style="text-align:center; background:#f0f0f0;" class="required">能力评价</th>
+                        </tr>
+                        <tr>
+                            <th class="required">工作状态</th><th class="required">协同意愿</th><th class="required">学习意愿</th><th class="required">晋升意愿</th>
+                            <th class="required">执行力</th><th class="required">沟通能力</th><th class="required">业务能力</th><th class="required">管理能力</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <!-- 给所有的 select 加上 required -->
+                            <td data-label="工作状态"><select name="self_workState" required><option value="">请选择</option><option>一般</option><option>合格</option><option>良好</option><option>优秀</option></select></td>
+                            <td data-label="协同意愿"><select name="self_collab" required><option value="">请选择</option><option>一般</option><option>合格</option><option>良好</option><option>优秀</option></select></td>
+                            <td data-label="学习意愿"><select name="self_learn" required><option value="">请选择</option><option>一般</option><option>合格</option><option>良好</option><option>优秀</option></select></td>
+                            <td data-label="晋升意愿"><select name="self_promote" required><option value="">请选择</option><option>一般</option><option>合格</option><option>良好</option><option>优秀</option></select></td>
+                            <td data-label="执行力"><select name="self_exec" required><option value="">请选择</option><option>一般</option><option>合格</option><option>良好</option><option>优秀</option></select></td>
+                            <td data-label="沟通能力"><select name="self_comm" required><option value="">请选择</option><option>一般</option><option>合格</option><option>良好</option><option>优秀</option></select></td>
+                            <td data-label="业务能力"><select name="self_biz" required><option value="">请选择</option><option>一般</option><option>合格</option><option>良好</option><option>优秀</option></select></td>
+                            <td data-label="管理能力"><select name="self_mgmt" required><option value="">请选择</option><option>一般</option><option>合格</option><option>良好</option><option>优秀</option></select></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </fieldset>
+
+        <!-- 个人申明 -->
+        <fieldset>
+            <legend>个人申明</legend>
+            <div class="declaration">
+                <p>1、本人保证所填写的上述资料全部真实准确，如有弄虚作假视为欺诈，公司可立即解除劳动合同并由本人承担一切法律责任。</p>
+                <p>2、公司已告知劳动报酬、工作环境、工作时间、等劳动情况，并要求本人于1个月内签订劳动合同。</p>
+            </div>
+            <div class="form-row">
+                <div class="form-group half">
+                    <label class="required">应聘者签字</label>
+                    <input type="text" name="signature" required style="font-family: 'Kaishu', 'STKaiti', serif; font-size: 18px;">
+                </div>
+                <div class="form-group quarter">
+                    <label class="required">日期</label>
+                    <input type="date" name="signDate" required>
+                </div>
+            </div>
+        </fieldset>
+
+        <button type="submit" class="submit-btn">提交应聘信息</button>
+    </form>
+</div>
+
+<script>
+// 修改表格行生成函数，为每个单元格添加data-label属性
+function addEduRow() {
+    const tbody = document.querySelector('#eduTable tbody');
+    const row = document.createElement('tr');
+    row.innerHTML = `
+        <td data-label="起止时间"><input type="text" name="edu_time[]" placeholder="例如：2018.09-2022.06"></td>
+        <td data-label="学校/机构名称"><input type="text" name="edu_school[]"></td>
+        <td data-label="入读途径">
+            <select name="edu_type[]">
+                <option value="统招">统招</option>
+                <option value="自考">自考</option>
+                <option value="其他">其他</option>
+            </select>
+        </td>
+        <td data-label="专业"><input type="text" name="edu_major[]"></td>
+        <td data-label="证书/职称"><input type="text" name="edu_cert[]"></td>
+        <td data-label="操作"><button type="button" class="btn-remove" onclick="removeRow(this)">删除</button></td>
+    `;
+    tbody.appendChild(row);
+}
+
+function addWorkRow() {
+    const tbody = document.querySelector('#workTable tbody');
+    const row = document.createElement('tr');
+    row.innerHTML = `
+        <td data-label="起止时间"><input type="text" name="work_time[]" placeholder="例如：2020.01-2023.01"></td>
+        <td data-label="工作单位"><input type="text" name="work_company[]"></td>
+        <td data-label="职位"><input type="text" name="work_position[]"></td>
+        <td data-label="薪资待遇"><input type="text" name="work_salary[]"></td>
+        <td data-label="离职原因"><input type="text" name="work_reason[]"></td>
+        <td data-label="证明人"><input type="text" name="work_ref[]"></td>
+        <td data-label="联系电话"><input type="tel" name="work_phone[]"></td>
+        <td data-label="操作"><button type="button" class="btn-remove" onclick="removeRow(this)">删除</button></td>
+    `;
+    tbody.appendChild(row);
+}
+
+// ========== 修改开始：addFamilyRow 函数中为输入框添加必填验证 ==========
+function addFamilyRow() {
+    const tbody = document.querySelector('#familyTable tbody');
+    const row = document.createElement('tr');
+    row.innerHTML = `
+        <!-- 【修改2】给姓名、与本人关系、联系电话输入框添加 required 属性 -->
+        <td data-label="姓名"><input type="text" name="fam_name[]" required></td>
+        <td data-label="年龄"><input type="number" name="fam_age[]" style="width:60px;" required></td>
+        <td data-label="与本人关系"><input type="text" name="fam_relation[]" required></td>
+        <td data-label="工作单位/地址"><input type="text" name="fam_company[]" required></td>
+        <td data-label="联系电话"><input type="tel" name="fam_phone[]" required></td>
+        <td data-label="操作"><button type="button" class="btn-remove" onclick="removeRow(this)">删除</button></td>
+    `;
+    tbody.appendChild(row);
+}
+// ========== 修改结束 ==========
+
+function removeRow(btn) {
+    const row = btn.parentNode.parentNode;
+    const tbody = row.parentNode;
+    if (tbody.children.length > 1) {
+        tbody.removeChild(row);
+    } else {
+        alert("至少保留一行记录");
+    }
+}
+
+// --- 新增：二级联动数据配置 ---
+const locationData = {
+    "总部": [
+        "人才店务服务中心",
+        "总经办",
+        "美物集采中心",
+        "拓展品宣传中心",
+        "配送中心",
+        "财务中心"
+    ],
+    "深圳市": [
+        "深圳宝安创业天虹",
+        "深圳宝安怀德万象汇",
+        "深圳宝安大悦城",
+        "深圳万丰海岸城",
+        "深圳松岗东方新天地",
+        "深圳龙华星河COCO City",
+        "深圳福田皇庭广场",
+        "深圳坪山益田假日世界",
+        "深圳宝安仁恒梦中心",
+        "深圳安荟邻"
+    ],
+    "广州市": [
+        "广州番禺雄峰城",
+        "广州云门NEW PARK",
+        "广州花都融创茂",
+        "广州番禺祈福广场"
+    ],
+    "佛山市": [
+        "佛山南海映月湖环宇城",
+        "佛山顺德海骏达",
+        "佛山顺德宏汇城",
+        "佛山顺德万象汇",
+        "佛山顺德印象城"
+    ],
+    "东莞市": [
+        "东莞长安怡安百货",
+        "东莞东城万达金街",
+        "东莞东城星河城",
+        "东莞南城海德汇一城",
+        "东莞莞城新芬",
+        "东莞东城民盈国贸2号店",
+        "东莞虎门地标",
+        "东莞虎门君乐汇",
+        "东莞麻涌华阳湖创客坊",
+        "东莞南城蜂汇广场",
+        "东莞东城民盈国贸城",
+        "东莞南城时代城广场",
+        "东莞塘厦天虹购物中心",
+        "东莞塘厦万科生活广场",
+        "东莞万江天和百货",
+        "东莞石龙聚龙天和时代广场",
+        "东莞常平百花时代广场",
+        "东莞常平翔龙天地",
+        "东莞大朗里悦里购物中心",
+        "东莞桥头上悦汇购物中心",
+        "东莞清溪天和百货",
+        "东莞樟木头天和百货"
+    ],
+    "惠州市": [
+        "惠州东平永旺",
+        "惠州华贸天地",
+        "惠州汇乐城购物中心",
+        "惠州仲恺天益城购物中心"
+    ],
+    "中山市": [
+        "中山大信新都汇",
+        "中山悦来天虹购物中心",
+        "中山石歧万象汇"
+    ],
+    "珠海市": [
+        "珠海斗门大信新都汇",
+        "珠海高新宝龙广场",
+        "珠海华发海韵城",
+        "珠海融德广场"
+    ],
+    "江门市": [
+        "江门江海广场",
+        "江门鹤山广场"
+    ],
+    "湛江市": [
+        "湛江鼎盛广场",
+        "湛江霞山万达广场",
+        "湛江赤坎丽悦新天"
+    ],
+    "茂名市": [
+        "茂名高州潘州广场"
+    ],
+    "云浮市": [
+        "云浮吾悦广场"
+    ],
+    "清远市": [
+        "清远顺盈时代广场"
+    ],
+    "河源市": [
+        "河源坚基购物中心"
+    ]
+}
+
+// --- 新增：二级联动逻辑函数 ---
+function initLocationSelector() {
+    const regionSelect = document.getElementById('regionSelect');
+    const storeSelect = document.getElementById('storeSelect');
+
+    // 监听一级菜单变化
+    regionSelect.addEventListener('change', function() {
+        const selectedRegion = this.value;
+        
+        // 清空二级菜单
+        storeSelect.innerHTML = '<option value="">请选择具体门店/部门</option>';
+        
+        if (selectedRegion && locationData[selectedRegion]) {
+            // 获取对应地区的门店列表
+            const stores = locationData[selectedRegion];
+            
+            // 动态生成选项
+            stores.forEach(store => {
+                const option = document.createElement('option');
+                option.value = store;
+                option.textContent = store;
+                storeSelect.appendChild(option);
+            });
+            
+            // 启用二级菜单
+            storeSelect.disabled = false;
+            storeSelect.required = true; // 确保必填
+        } else {
+            // 如果没有选地区，禁用二级菜单
+            storeSelect.disabled = true;
+            storeSelect.required = false;
+        }
+    });
+}
+
+// 页面加载完成后初始化
+document.addEventListener('DOMContentLoaded', function() {
+    initLocationSelector();
+    // 原有的其他初始化代码...
+    // addEduRow(); ...
+});
+
+// Initialize with one row for each table
+window.onload = function() {
+    addEduRow();
+    addWorkRow();
+    addFamilyRow();
+    // Set default date to today
+    document.querySelector('input[name="signDate"]').valueAsDate = new Date();
+};
+
+// ========== 修改开始：handleSubmit 函数中添加家庭数据验证 ==========
+function handleSubmit(e) {
+    e.preventDefault();
+    
+    if(!confirm("确认提交所有信息吗？提交后将无法修改。")) {
+        return false;
+    }
+
+    const form = e.target;
+    const submitBtn = form.querySelector('.submit-btn');
+    const originalText = submitBtn.innerText;
+    
+    // 禁用按钮防止重复提交
+    submitBtn.disabled = true;
+    submitBtn.innerText = "提交中...";
+
+    // 收集表单数据
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    // 辅助函数：收集所有同名的数组字段（包括input和select）
+    const collectArray = (name) => {
+        const inputs = form.querySelectorAll(`input[name="${name}[]"], select[name="${name}[]"]`);
+        return Array.from(inputs).map(input => input.value);
+    };
+
+    // 教育经历
+    data.edu_time = collectArray('edu_time');
+    data.edu_school = collectArray('edu_school');
+    data.edu_type = collectArray('edu_type');       // 新增
+    data.edu_major = collectArray('edu_major');
+    data.edu_cert = collectArray('edu_cert');       // 新增
+
+    // 工作经历
+    data.work_time = collectArray('work_time');
+    data.work_company = collectArray('work_company');
+    data.work_position = collectArray('work_position');
+    data.work_salary = collectArray('work_salary'); // 新增
+    data.work_reason = collectArray('work_reason');
+    data.work_ref = collectArray('work_ref');       // 新增
+    data.work_phone = collectArray('work_phone');   // 新增
+
+    // 【修改3】家庭情况（现在为必填）
+    data.fam_name = collectArray('fam_name');
+    data.fam_age = collectArray('fam_age');
+    data.fam_relation = collectArray('fam_relation');
+    data.fam_company = collectArray('fam_company');
+    data.fam_phone = collectArray('fam_phone');
+
+    // 【修改4】验证家庭情况至少有一个非空行
+    const hasValidFamily = data.fam_name.some(name => name && name.trim() !== '') ||
+                           data.fam_relation.some(rel => rel && rel.trim() !== '') ||
+                           data.fam_phone.some(phone => phone && phone.trim() !== '');
+    
+    if (!hasValidFamily) {
+        alert('家庭情况为必填项，请至少填写一行家庭成员信息！');
+        submitBtn.disabled = false;
+        submitBtn.innerText = originalText;
+        return false;
+    }
+
+    // 发送请求到后端
+    fetch('/api/submit', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.text().then(text => { throw new Error(text); });
+        }
+        return response.json();
+    })
+    .then(result => {
+        if (result.success) {
+            alert('提交成功！感谢您的应聘，我们会尽快联系您。');
+            form.reset();
+            // 重置动态行
+            document.querySelector('#eduTable tbody').innerHTML = '';
+            document.querySelector('#workTable tbody').innerHTML = '';
+            document.querySelector('#familyTable tbody').innerHTML = '';
+            addEduRow();
+            addWorkRow();
+            addFamilyRow();
+        } else {
+            alert('提交失败: ' + result.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('网络错误，请稍后重试。' + (error.message ? ' 详情：' + error.message : ''));
+    })
+    .finally(() => {
+        submitBtn.disabled = false;
+        submitBtn.innerText = originalText;
+    });
+
+    return false;
+}
+// ========== 修改结束 ==========
+</script>
+
+</body>
+</html>

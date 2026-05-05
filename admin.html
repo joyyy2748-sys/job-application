@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>应聘数据管理后台</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Microsoft YaHei', sans-serif; background: #f0f2f5; padding: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; padding: 20px; border-radius: 10px; margin-bottom: 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .stats { background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 20px; }
+        .refresh-btn { background: white; color: #764ba2; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+        .filter-section {
+            background: white; border-radius: 10px; padding: 20px; margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .filter-row { display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-end; }
+        .filter-group { flex: 1; min-width: 200px; }
+        .filter-group label { display: block; font-size: 14px; color: #6c757d; margin-bottom: 5px; }
+        .filter-group select { width: 100%; padding: 10px; border: 1px solid #dee2e6; border-radius: 5px; }
+        .filter-actions { display: flex; gap: 10px; }
+        .filter-btn { padding: 10px 20px; background: #764ba2; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .filter-btn.reset { background: #6c757d; }
+        .active-filters { margin-top: 15px; padding-top: 15px; border-top: 1px solid #dee2e6; }
+        .filter-tag { background: #e9ecef; padding: 5px 12px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px; }
+        .filter-tag .remove { color: #dc3545; cursor: pointer; margin-left: 5px; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab { padding: 12px 24px; background: white; border: none; border-radius: 8px; cursor: pointer; }
+        .tab.active { background: #764ba2; color: white; }
+        .content-panel { background: white; border-radius: 10px; padding: 20px; min-height: 500px; }
+        .search-box { display: flex; gap: 10px; margin-bottom: 20px; }
+        .search-box input { flex: 1; padding: 10px; border: 1px solid #dee2e6; border-radius: 5px; }
+        .records-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 20px; }
+        .record-card {
+            background: white; border: 1px solid #e9ecef; border-radius: 10px; overflow: hidden;
+            transition: all 0.3s; cursor: pointer;
+        }
+        .record-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(118,75,162,0.2); }
+        .record-card.expanded { grid-column: 1 / -1; }
+        .record-header {
+            background: #f8f9fa; padding: 15px; display: flex; justify-content: space-between;
+            align-items: center; border-bottom: 1px solid #e9ecef;
+        }
+        .record-name { font-size: 18px; font-weight: bold; color: #764ba2; }
+        .record-badge { background: #764ba2; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; }
+        .record-time { color: #6c757d; font-size: 13px; }
+        .record-preview { padding: 15px; display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+        .preview-item { font-size: 13px; }
+        .preview-item .label { color: #6c757d; margin-right: 5px; }
+        .record-detail { padding: 20px; border-top: 2px solid #764ba2; background: #f8f9fa; }
+        .detail-section { margin-bottom: 20px; }
+        .detail-section-title { font-size: 16px; font-weight: bold; margin-bottom: 15px; padding-bottom: 5px; border-bottom: 2px solid #dee2e6; }
+        .detail-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; }
+        .detail-item { font-size: 14px; }
+        .detail-item .label { color: #6c757d; margin-right: 5px; font-weight: 500; }
+        .detail-item .value { color: #212529; }
+        .education-table, .work-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; }
+        .education-table th, .work-table th { background: #e9ecef; padding: 8px; text-align: left; }
+        .education-table td, .work-table td { padding: 8px; border-bottom: 1px solid #dee2e6; }
+        .expand-icon { display: block; text-align: center; padding: 5px; color: #764ba2; font-size: 12px; }
+        .loading { text-align: center; padding: 50px; color: #6c757d; }
+        .error { background: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px; }
+        .no-data { text-align: center; padding: 50px; color: #6c757d; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📋 应聘数据管理 <span class="stats" id="stats">加载中...</span></h1>
+        <button class="refresh-btn" onclick="refreshData()">🔄 刷新</button>
+    </div>
+
+    <!-- 筛选区域 -->
+    <div class="filter-section">
+        <div class="filter-row">
+            <div class="filter-group">
+                <label>所属大区/城市</label>
+                <select id="regionFilter" onchange="handleRegionChange()">
+                    <option value="">全部</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>具体门店/部门</label>
+                <select id="storeFilter" disabled>
+                    <option value="">全部</option>
+                </select>
+            </div>
+            <div class="filter-actions">
+                <button class="filter-btn" onclick="applyFilter()">应用筛选</button>
+                <button class="filter-btn reset" onclick="resetFilter()">重置</button>
+            </div>
+        </div>
+        <div class="active-filters" id="activeFilters" style="display:none;">
+            <span class="filter-tag"><span id="filterText"></span><span class="remove" onclick="resetFilter()">×</span></span>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab active" onclick="switchTab('parsed')">📊 卡片视图</button>
+        <button class="tab" onclick="switchTab('raw')">📄 原始文本</button>
+    </div>
+
+    <div class="content-panel">
+        <div id="parsedView">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="搜索姓名、岗位、电话...">
+                <button onclick="searchRecords()">🔍 搜索</button>
+            </div>
+            <div id="recordsList" class="records-grid"></div>
+        </div>
+        <div id="rawView" style="display:none;">
+            <pre id="rawContent" class="raw-content" style="background:#1e1e1e; color:#d4d4d4; padding:20px; border-radius:8px; font-family:monospace; white-space:pre-wrap;"></pre>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 测试题题目库（与登记表一致）
+    const testQuestions = {
+        q1: { text: "您找工作的标准", options: { A: "符合兴趣爱好或专业", B: "工作具有挑战性，多劳多得", C: "自主性大，不受约束", D: "工作环境好，待遇高" } },
+        q2: { text: "您对职业价值的认知是", options: { A: "赢得成就感，能看到自己工作的具体成果，并因此达成精神上的满足", B: "提高个人身份或名望，但此声望是来自于他人的敬佩，而非来自权力与地位", C: "赋予个人权力来策划并分配工作给其他人，拥有管理权", D: "获得优厚的报酬，使自己有足够的财力去获得自己想要的东西" } },
+        q3: { text: "当您在嘈杂环境中忽然接到面试电话，您会？", options: { A: "无所谓，留在原地，继续接听", B: "立刻找一个比较安静的地方", C: "附近没有安静的地方，请对方留下联系方式，然后迅速打过去", D: "附近没有安静的地方，请对方留下联系方式，第二天再打" } },
+        q4: { text: "假设您作为公司主要员工，领导安排您处理临时工作，突然，家人致电说家里有非常紧急事务需要您立即回家处理，您将如何处理？", options: { A: "事出紧急，家庭在第一位，并且无心工作，应告知领导后立刻放下手头事务，回家", B: "安排家人先处理事情，并告知家人自己将在处理完临时工作事务后第一时间回家", C: "致电领导，交接工作，并交接安排妥当后再赶回家", D: "不接受非工作时间布置的临时工作，或与岗位职责不符的临时工作" } },
+        q5: { text: "领导需要您写一份工作汇报，于今日下午前上交。临近下班您完成了初稿，但是细节尚有提高空间，数据有待完善之处，您会", options: { A: "先将初稿交至领导，待反馈意见后再整体修改", B: "写一封请示书给领导，申请延期一日提交，然后明日将报告尽善尽美的上交", C: "晚上加班完成，达到尽善尽美后交给领导", D: "工作汇报不太重要，叙事清楚即可，应把主要劳动力放在提高公司收益上" } },
+        q6: { text: "如果企业中有一位很有才华、能力很强的人，工作业绩直线上升，但是他经常搞小动作，冒一些小的风险或做了伤害公司利益的事，但情节较轻。您作为部门领导你会怎么处理 / 或作为同事会怎么提建议。", options: { A: "这样的人不能用，按规章制度揭发，上报人力部门开除", B: "引导教育、劝导，如果屡教不改，确定人格有问题再开除", C: "通过引导教育，他屡教不改，但公司也不能没有他，只能顾全大局，睁一只眼闭一只眼", D: "只要他业绩好，搞点小动作，不伤大体，毕竟他创造的价值远远高于他的小动作" } },
+        q7: { text: "假设您的上司是一个非常严厉、领导手腕强硬，时常给您压力的人，您的这种领导方式对你的意义是？", options: { A: "认为对您严厉是为了你好，在这种严厉的管理模式下，可以更好锻炼自己的抗压能力", B: "认为较难以接受，希望通过转岗至其他部门", C: "调整自己的状态以适应领导", D: "暂时忍受，找到合适时机与领导沟通，找到适合双方的沟通方式" } }
+    };
+
+    // 大区/门店数据（与登记表一致）
+    const locationData = {
+        "总部": ["人才店务服务中心", "总经办", "美物集采中心", "拓展品宣传中心", "配送中心", "财务中心"],
+        "深圳市": ["深圳宝安创业天虹", "深圳宝安怀德万象汇", "深圳宝安大悦城", "深圳万丰海岸城", "深圳松岗东方新天地", "深圳龙华星河COCO City", "深圳福田皇庭广场", "深圳坪山益田假日世界", "深圳宝安仁恒梦中心", "深圳安荟邻"],
+        "广州市": ["广州番禺雄峰城", "广州云门NEW PARK", "广州花都融创茂", "广州番禺祈福广场"],
+        "佛山市": ["佛山南海映月湖环宇城", "佛山顺德海骏达", "佛山顺德宏汇城", "佛山顺德万象汇", "佛山顺德印象城"],
+        "东莞市": ["东莞长安怡安百货", "东莞东城万达金街", "东莞东城星河城", "东莞南城海德汇一城", "东莞莞城新芬", "东莞东城民盈国贸2号店", "东莞虎门地标", "东莞虎门君乐汇", "东莞麻涌华阳湖创客坊", "东莞南城蜂汇广场", "东莞东城民盈国贸城", "东莞南城时代城广场", "东莞塘厦天虹购物中心", "东莞塘厦万科生活广场", "东莞万江天和百货", "东莞石龙聚龙天和时代广场", "东莞常平百花时代广场", "东莞常平翔龙天地", "东莞大朗里悦里购物中心", "东莞桥头上悦汇购物中心", "东莞清溪天和百货", "东莞樟木头天和百货"],
+        "惠州市": ["惠州东平永旺", "惠州华贸天地", "惠州汇乐城购物中心", "惠州仲恺天益城购物中心"],
+        "中山市": ["中山大信新都汇", "中山悦来天虹购物中心", "中山石歧万象汇"],
+        "珠海市": ["珠海斗门大信新都汇", "珠海高新宝龙广场", "珠海华发海韵城", "珠海融德广场"],
+        "江门市": ["江门江海广场", "江门鹤山广场"],
+        "湛江市": ["湛江鼎盛广场", "湛江霞山万达广场", "湛江赤坎丽悦新天"],
+        "茂名市": ["茂名高州潘州广场"],
+        "云浮市": ["云浮吾悦广场"],
+        "清远市": ["清远顺盈时代广场"],
+        "河源市": ["河源坚基购物中心"]
+    };
+
+    let allRecords = [];
+    let filteredRecords = [];
+    let expandedIndex = null;
+
+    // 初始化大区下拉框
+    function initRegionFilter() {
+        const regionSelect = document.getElementById('regionFilter');
+        Object.keys(locationData).sort().forEach(region => {
+            const opt = document.createElement('option');
+            opt.value = region;
+            opt.textContent = region;
+            regionSelect.appendChild(opt);
+        });
+    }
+
+    // 大区变化时加载门店
+    window.handleRegionChange = function() {
+        const region = document.getElementById('regionFilter').value;
+        const storeSelect = document.getElementById('storeFilter');
+        storeSelect.innerHTML = '<option value="">全部</option>';
+        if (region && locationData[region]) {
+            locationData[region].forEach(store => {
+                const opt = document.createElement('option');
+                opt.value = store;
+                opt.textContent = store;
+                storeSelect.appendChild(opt);
+            });
+            storeSelect.disabled = false;
+        } else {
+            storeSelect.disabled = true;
+        }
+    };
+
+// 应用筛选
+window.applyFilter = function() {
+    const region = document.getElementById('regionFilter').value;
+    const store = document.getElementById('storeFilter').value;
+    
+    if (!region && !store) {
+        resetFilter();
+        return;
+    }
+    
+    // 显示筛选标签
+    const filterText = [];
+    if (region) filterText.push(`大区:${region}`);
+    if (store) filterText.push(`门店:${store}`);
+    document.getElementById('filterText').textContent = filterText.join(' · ');
+    document.getElementById('activeFilters').style.display = 'block';
+
+    filteredRecords = allRecords.filter(r => {
+        const basic = r.basicInfo || {};
+        
+        // 尝试多种可能的字段名
+        const rRegion = basic['所属大区/城市'] || basic['所属大区'] || basic['大区'] || '';
+        const rStore = basic['门店/部门'] || basic['门店'] || basic['部门'] || '';
+        
+        console.log('当前记录:', basic['姓名'], '大区:', rRegion, '门店:', rStore); // 调试用
+        
+        let match = true;
+        
+        if (region) {
+            match = match && rRegion === region;
+        }
+        
+        if (store) {
+            match = match && rStore === store;
+        }
+        
+        return match;
+    });
+    
+    console.log('筛选结果数量:', filteredRecords.length);
+    renderParsedView(filteredRecords);
+    document.getElementById('stats').textContent = `共 ${filteredRecords.length} 条记录`;
+};
+
+window.resetFilter = function() {
+    document.getElementById('regionFilter').value = '';
+    // 重置门店下拉框
+    const storeSelect = document.getElementById('storeFilter');
+    storeSelect.innerHTML = '<option value="">全部</option>';
+    storeSelect.disabled = true;
+    document.getElementById('activeFilters').style.display = 'none';
+    
+    filteredRecords = allRecords;
+    renderParsedView(allRecords);
+    document.getElementById('stats').textContent = `共 ${allRecords.length} 条记录`;
+};
+
+    window.searchRecords = function() {
+        const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
+        if (!keyword) {
+            filteredRecords = allRecords;
+        } else {
+            filteredRecords = allRecords.filter(r => {
+                const basic = r.basicInfo || {};
+                return Object.values(basic).some(v => v && v.toString().toLowerCase().includes(keyword));
+            });
+        }
+        renderParsedView(filteredRecords);
+        document.getElementById('stats').textContent = `共 ${filteredRecords.length} 条记录`;
+    };
+
+    function renderParsedView(records) {
+        const container = document.getElementById('recordsList');
+        if (!records || records.length === 0) {
+            container.innerHTML = '<div class="no-data">暂无数据</div>';
+            return;
+        }
+        let html = '';
+        records.forEach((rec, idx) => {
+            const basic = rec.basicInfo || {};
+            const isExpanded = expandedIndex === idx;
+            html += `
+                <div class="record-card ${isExpanded ? 'expanded' : ''}" onclick="toggleExpand(${idx})">
+                    <div class="record-header">
+                        <div><span class="record-name">${basic['姓名'] || '未知'}</span> <span class="record-badge">${basic['所属大区/城市'] || basic['所属大区'] || basic['大区'] || '未分配'}</span></div>
+                        <span class="record-time">${rec.submitTime || ''}</span>
+                    </div>
+                    <div class="record-preview">
+                        ${renderPreview('📞', '电话', basic['联系电话'])}
+                        ${renderPreview('🎯', '岗位', basic['应聘岗位'])}
+                        ${renderPreview('💰', '薪资', basic['薪资要求'])}
+                        ${renderPreview('🏢', '门店', basic['门店/部门'])}
+                    </div>
+                    ${isExpanded ? renderDetail(rec) : '<div class="expand-icon">▼ 点击展开详情</div>'}
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    function renderPreview(icon, label, val) {
+        if (!val || val === '未填') return '';
+        return `<div class="preview-item"><span class="label">${icon} ${label}:</span> ${val}</div>`;
+    }
+
+    function renderDetail(rec) {
+        const basic = rec.basicInfo || {};
+        // 教育经历表格
+        let eduHtml = '<table class="education-table"><tr><th>起止时间</th><th>学校/机构</th><th>入读途径</th><th>专业</th><th>证书/职称</th></tr>';
+        if (rec.education && rec.education.length) {
+            rec.education.forEach(e => {
+                eduHtml += `<tr><td>${e['时间'] || ''}</td><td>${e['学校'] || ''}</td><td>${e['入读途径'] || ''}</td><td>${e['专业'] || ''}</td><td>${e['证书/职称'] || ''}</td></tr>`;
+            });
+        } else {
+            eduHtml += '<tr><td colspan="5">暂无</td></tr>';
+        }
+        eduHtml += '</table>';
+
+        // 工作经历表格
+        let workHtml = '<table class="work-table"><tr><th>起止时间</th><th>公司</th><th>职位</th><th>薪资待遇</th><th>离职原因</th><th>证明人</th><th>联系电话</th></tr>';
+        if (rec.workExp && rec.workExp.length) {
+            rec.workExp.forEach(w => {
+                workHtml += `<tr><td>${w['时间'] || ''}</td><td>${w['公司'] || ''}</td><td>${w['职位'] || ''}</td><td>${w['薪资待遇'] || ''}</td><td>${w['离职原因'] || ''}</td><td>${w['证明人'] || ''}</td><td>${w['联系电话'] || ''}</td></tr>`;
+            });
+        } else {
+            workHtml += '<tr><td colspan="7">暂无</td></tr>';
+        }
+        workHtml += '</table>';
+
+        // 测试题
+        let testHtml = '';
+        for (let i = 1; i <= 7; i++) {
+            const ans = rec.testAnswers[`q${i}`];
+            if (ans) {
+                const q = testQuestions[`q${i}`];
+                const optText = q.options[ans] || ans;
+                testHtml += `<div class="detail-item" style="grid-column:1/-1;"><span class="label">${i}. ${q.text}</span><br><span style="margin-left:20px;">答案：${ans}. ${optText}</span></div>`;
+            }
+        }
+        if (!testHtml) testHtml = '<div class="detail-item">无</div>';
+
+        // 自我评价
+        let selfHtml = '';
+        if (rec.selfEval) {
+            Object.entries(rec.selfEval).forEach(([k,v]) => {
+                selfHtml += `<div class="detail-item"><span class="label">${k}:</span> ${v}</div>`;
+            });
+        } else {
+            selfHtml = '<div class="detail-item">无</div>';
+        }
+
+        return `
+            <div class="record-detail" onclick="event.stopPropagation()">
+                <div class="detail-section">
+                    <div class="detail-section-title">📋 基本信息</div>
+                    <div class="detail-grid">
+                        ${renderDetailItem('所属大区', basic['所属大区/城市'])}
+                        ${renderDetailItem('门店/部门', basic['门店/部门'])}
+                        ${renderDetailItem('姓名', basic['姓名'])}
+                        ${renderDetailItem('性别', basic['性别'])}
+                        ${renderDetailItem('出生年月', basic['出生年月'])}
+                        ${renderDetailItem('学历', basic['学历'])}
+                        ${renderDetailItem('民族', basic['民族'])}
+                        ${renderDetailItem('身份证号', basic['身份证号'])}
+                        ${renderDetailItem('政治面貌', basic['政治面貌'])}
+                        ${renderDetailItem('血型', basic['血型'])}
+                        ${renderDetailItem('健康状况', basic['健康状况'])}
+                        ${renderDetailItem('联系电话', basic['联系电话'])}
+                        ${renderDetailItem('最快到岗时间', basic['最快到岗时间'])}
+                        ${renderDetailItem('婚育状况', basic['婚育状况'])}
+                        ${renderDetailItem('子女', (basic['子女男']||'0')+'男'+(basic['子女女']||'0')+'女')}
+                        ${renderDetailItem('户籍地址', basic['户籍地址'])}
+                        ${renderDetailItem('现住址', basic['现住址'])}
+                        ${renderDetailItem('应聘岗位', basic['应聘岗位'])}
+                        ${renderDetailItem('薪资要求', basic['薪资要求'])}
+                        ${renderDetailItem('与原单位关系', basic['与原单位关系'])}
+                        ${renderDetailItem('紧急联络人', basic['紧急联络人'])}
+                        ${renderDetailItem('紧急联络人电话', basic['紧急联络人电话'])}
+                        ${renderDetailItem('信息来源', basic['信息来源'])}
+                        ${renderDetailItem('介绍人', basic['介绍人姓名'])}
+                        ${renderDetailItem('背景调查', basic['是否同意接触前雇主'])}
+                        ${renderDetailItem('签字', basic['应聘者签字'])}
+                        ${renderDetailItem('签字日期', basic['日期'])}
+                    </div>
+                </div>
+                <div class="detail-section">
+                    <div class="detail-section-title">📚 教育经历</div>
+                    ${eduHtml}
+                </div>
+                <div class="detail-section">
+                    <div class="detail-section-title">💼 工作经历</div>
+                    ${workHtml}
+                </div>
+                <div class="detail-section">
+                    <div class="detail-section-title">📝 面试测试题</div>
+                    <div class="detail-grid">${testHtml}</div>
+                </div>
+                <div class="detail-section">
+                    <div class="detail-section-title">⭐ 自我评价</div>
+                    <div class="detail-grid">${selfHtml}</div>
+                </div>
+            </div>
+        `;
+    }
+
+    function renderDetailItem(label, val) {
+        if (!val || val === '未填') return '';
+        return `<div class="detail-item"><span class="label">${label}:</span> ${val}</div>`;
+    }
+
+    window.toggleExpand = function(idx) {
+        expandedIndex = expandedIndex === idx ? null : idx;
+        renderParsedView(filteredRecords);
+    };
+
+    window.switchTab = function(tab) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        event.target.classList.add('active');
+        if (tab === 'parsed') {
+            document.getElementById('parsedView').style.display = 'block';
+            document.getElementById('rawView').style.display = 'none';
+        } else {
+            document.getElementById('parsedView').style.display = 'none';
+            document.getElementById('rawView').style.display = 'block';
+        }
+    };
+
+    function fetchData() {
+        document.getElementById('recordsList').innerHTML = '<div class="loading">加载中...</div>';
+        fetch('/admin/api/data')
+            .then(res => {
+                if (res.status === 401) {
+                    window.location.reload();
+                    throw new Error('需要登录');
+                }
+                return res.json();
+            })
+.then(result => {
+    if (result.success) {
+        allRecords = result.data;
+        
+        // 数据标准化：确保每条记录都有正确的字段
+        allRecords = allRecords.map(record => {
+            const basic = record.basicInfo || {};
+            
+            // 如果没有"所属大区/城市"字段，但可能有其他字段，尝试从其他字段提取
+            if (!basic['所属大区/城市'] && basic['门店/部门']) {
+                // 尝试从门店名称推断大区？或者保持原样
+                // 这里先留空，让用户手动添加
+            }
+            
+            return record;
+        });
+        
+        console.log('原始数据:', allRecords);
+        filteredRecords = allRecords;
+        renderParsedView(allRecords);
+        document.getElementById('stats').textContent = `共 ${result.total} 条记录`;
+    } else {
+        document.getElementById('recordsList').innerHTML = `<div class="error">${result.message}</div>`;
+    }
+})
+            .catch(err => {
+                document.getElementById('recordsList').innerHTML = `<div class="error">${err.message}</div>`;
+            });
+        // 加载原始文本
+        fetch('/admin/api/raw')
+            .then(res => res.text())
+            .then(text => document.getElementById('rawContent').textContent = text || '暂无');
+    }
+
+    window.refreshData = fetchData;
+
+    // 初始化
+    document.addEventListener('DOMContentLoaded', () => {
+        initRegionFilter();
+        fetchData();
+    });
+</script>
+</body>
+</html>
